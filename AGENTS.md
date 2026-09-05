@@ -10,8 +10,9 @@ scripts — starting with cross-platform-safe removal of a directory (to replace
 It implements the decision proposed in
 [ADR 0016](https://github.com/Mikode13/engineering/blob/main/adr/0016-centralize-cross-platform-script-utilities.md)
 in `mikode-engineering` (currently `Proposed`). The ADR scopes this package's first
-version to `clean` only and decides its implementation (Node's built-in `fs` APIs); it
-deliberately leaves the package's name and any future API beyond `clean` open.
+version to `clean` only and decides its implementation using Node's built-in filesystem
+APIs. Future API beyond `clean` is added only when repeated use across MiKode
+repositories demonstrates a concrete shared need.
 
 ## Constraint specific to this repository
 
