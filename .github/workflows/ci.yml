@@ -61,7 +61,7 @@ jobs:
         run: |
           mkdir smoke-output
           echo x > smoke-output\file.txt
-          node dist\cli.js clean smoke-output
+          node dist\bin.js clean smoke-output
           if exist smoke-output (
             echo ERROR: smoke-output was not removed
             exit /b 1
