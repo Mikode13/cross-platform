@@ -1,0 +1,53 @@
+{
+	"name": "@mikode13/cross-platform",
+	"version": "0.1.0",
+	"description": "Cross-platform utilities for MiKode build and maintenance scripts",
+	"type": "module",
+	"license": "SEE LICENSE IN LICENSE",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/mikode13/cross-platform.git"
+	},
+	"engines": {
+		"node": "^22.13.0 || ^24.0.0"
+	},
+	"packageManager": "pnpm@11.17.0",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"files": [
+		"dist"
+	],
+	"publishConfig": {
+		"access": "public"
+	},
+	"scripts": {
+		"prepare": "mikode-git-hooks install",
+		"build": "tsc -p tsconfig.build.json",
+		"typecheck": "tsc --noEmit && tsc --noEmit -p tests",
+		"format": "prettier . --write",
+		"format:check": "prettier . --check",
+		"lint": "eslint . --max-warnings 0",
+		"lint:fix": "eslint . --fix",
+		"test": "vitest run --project unit",
+		"test:unit": "vitest run --project unit",
+		"test:unit:watch": "vitest --project unit",
+		"test:coverage": "vitest run --project unit --coverage",
+		"pack:check": "pnpm pack --dry-run",
+		"check": "pnpm run format:check && pnpm run lint && pnpm run typecheck"
+	},
+	"devDependencies": {
+		"@mikode13/code-quality": "0.1.0",
+		"@mikode13/code-style": "0.1.0",
+		"@mikode13/git-hooks": "0.1.0",
+		"@mikode13/tsconfig": "0.1.0",
+		"@types/node": "^26.1.2",
+		"@vitest/coverage-v8": "^4.1.11",
+		"eslint": "^10.8.0",
+		"prettier": "^3.9.6",
+		"typescript": "^6.0.3",
+		"vitest": "^4.1.11"
+	}
+}
