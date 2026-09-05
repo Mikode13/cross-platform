@@ -25,3 +25,44 @@ jobs:
       tests: true
       build: true
       package: true
+
+  windows:
+    name: cross-platform check (Windows)
+    # Repository-specific extension: the shared CI contract only runs on ubuntu-latest, but
+    # this package's entire purpose is behaving identically on native Windows cmd.exe, which
+    # ubuntu-latest cannot verify. See continuous-integration.md's "repository-specific
+    # extension" allowance.
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Install pnpm and Node.js
+        uses: pnpm/setup@84cb39b217b10273981911c288cd62326dc7c6d2 # v2.0.2
+        with:
+          version: 11.17.0
+          runtime: node@24
+          cache: true
+          cache-dependency-path: pnpm-lock.yaml
+          package-json-file: package.json
+          install: false
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run offline tests
+        run: pnpm test
+
+      - name: Build project
+        run: pnpm run build
+
+      - name: Run the built CLI under native cmd.exe
+        shell: cmd
+        run: |
+          mkdir smoke-output
+          echo x > smoke-output\file.txt
+          node dist\cli.js clean smoke-output
+          if exist smoke-output (
+            echo ERROR: smoke-output was not removed
+            exit /b 1
+          )
