@@ -17,6 +17,9 @@
 	"exports": {
 		".": "./dist/index.js"
 	},
+	"bin": {
+		"mikode-scripts": "./dist/cli.js"
+	},
 	"files": [
 		"dist"
 	],
