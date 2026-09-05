@@ -21,9 +21,9 @@ in `mikode-engineering` for the decision this package implements. The ADR is cur
 
 ## Status
 
-This package is scaffolded but has no published API yet. Its first capability
-(cross-platform-safe removal of a directory, to replace `rm -rf` in a `build` script) is
-still being designed.
+The first (and currently only) capability, `clean`, is implemented: cross-platform-safe
+removal of a directory using Node's built-in `node:fs/promises`, exposed both as a
+function and as a CLI for `package.json` scripts.
 
 ## Install
 
@@ -31,10 +31,33 @@ still being designed.
 pnpm add @mikode13/cross-platform
 ```
 
+## Usage
+
+As a function:
+
+```ts
+import { clean } from '@mikode13/cross-platform';
+
+await clean('dist');
+```
+
+From a `package.json` script, in place of `rm -rf`:
+
+```json
+{
+	"scripts": {
+		"build": "mikode-scripts clean dist && tsc -p tsconfig.build.json"
+	}
+}
+```
+
+The CLI rejects an empty path, the root of the filesystem, and the current working
+directory. It does not restrict the target to be inside the current working directory
+(for example `../other-dir` is allowed).
+
 ## Tests
 
-`pnpm test` runs the unit suite; it is currently empty because no behavior has been
-implemented yet.
+`pnpm test` runs the unit suite.
 
 ## License
 

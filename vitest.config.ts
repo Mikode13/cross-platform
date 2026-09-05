@@ -2,8 +2,6 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
 	test: {
-		// No behavior exists yet to test; remove once the first *.unit.test.ts lands.
-		passWithNoTests: true,
 		projects: [
 			{
 				test: {
