@@ -16,8 +16,9 @@ third-party tool or hand-rolling a platform-specific command each time the same 
 appears.
 
 See [ADR 0016](https://github.com/Mikode13/engineering/blob/main/adr/0016-centralize-cross-platform-script-utilities.md)
-in `mikode-engineering` for the decision this package implements. The ADR is currently
-`Proposed`.
+and the [cross-platform script utilities standard](https://github.com/Mikode13/engineering/blob/main/standards/cross-platform-script-utilities.md)
+in `mikode-engineering` for the decision and usage policy this package implements. The
+ADR is `Accepted`.
 
 ## Status
 

@@ -7,12 +7,13 @@ cross-platform-unsafe operations needed by `package.json` build and maintenance
 scripts — starting with cross-platform-safe removal of a directory (to replace
 `rm -rf` in a `build` script, which fails under native Windows `cmd.exe`).
 
-It implements the decision proposed in
+It implements the accepted decision in
 [ADR 0016](https://github.com/Mikode13/engineering/blob/main/adr/0016-centralize-cross-platform-script-utilities.md)
-in `mikode-engineering` (currently `Proposed`). The ADR scopes this package's first
-version to `clean` only and decides its implementation using Node's built-in filesystem
-APIs. Future API beyond `clean` is added only when repeated use across MiKode
-repositories demonstrates a concrete shared need.
+and the [cross-platform script utilities standard](https://github.com/Mikode13/engineering/blob/main/standards/cross-platform-script-utilities.md)
+in `mikode-engineering`. The ADR scopes this package's first version to `clean` only
+and decides its implementation using Node's built-in filesystem APIs. Future API beyond
+`clean` is added only when repeated use across MiKode repositories demonstrates a
+concrete shared need.
 
 ## Constraint specific to this repository
 
