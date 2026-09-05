@@ -1,5 +1,4 @@
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { clean } from './clean.ts';
 
 export function resolveCleanTarget(target: string, cwd: string): string {
@@ -31,8 +30,4 @@ export async function runCli(argv: string[], cwd: string): Promise<void> {
 
 	const resolved = resolveCleanTarget(target ?? '', cwd);
 	await clean(resolved);
-}
-
-if (process.argv[1] === fileURLToPath(import.meta.url)) {
-	await runCli(process.argv.slice(2), process.cwd());
 }
