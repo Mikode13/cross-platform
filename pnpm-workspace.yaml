@@ -4,3 +4,7 @@ allowBuilds:
   # Explicitly deny inherited only-allow-pnpm guards; consumers do not need them.
   '@mikode13/code-quality': false
   '@mikode13/tsconfig': false
+# First-party release published from Mikode13/tsconfig; the age gate exists to slow down
+# unreviewed third-party updates, not our own.
+minimumReleaseAgeExclude:
+  - '@mikode13/tsconfig@1.0.0'
