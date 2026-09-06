@@ -60,6 +60,13 @@ directory. It does not restrict the target to be inside the current working dire
 
 `pnpm test` runs the unit suite.
 
+## Releases
+
+Versions are derived from Conventional Commit titles by `semantic-release` and published
+automatically from `main`. The npm registry, Git tags, and GitHub Releases are the
+authoritative history; the `version` field in this repository stays at
+`0.0.0-development` and is never committed with a real version.
+
 ## License
 
 This project is source-available under the MIT License with the
