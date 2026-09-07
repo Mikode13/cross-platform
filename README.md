@@ -58,7 +58,7 @@ directory. It does not restrict the target to be inside the current working dire
 
 ## Tests
 
-`pnpm test` runs the unit suite.
+`pnpm test` pnpm test runs the unit and packaging integration suites.
 
 ## Releases
 
