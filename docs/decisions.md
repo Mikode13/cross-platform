@@ -70,3 +70,10 @@ set, because a manifest can promise a path that the build never emits.
 **Consequences.** `pack:check` is slower, since it always compiles first. It is now the
 gate that catches both an incomplete tarball and a stale one, and it fails locally for
 the same reasons it fails in CI.
+
+`tests/integration/packaging.integration.test.ts` locks both behaviors in. It runs the
+real build and the real verifier rather than a fake, because the defect lived in how
+those two commands compose, which a unit test of either one could not observe. The
+expected file count is derived from `src` inside the test, independently of the
+verifier, so a verifier that expects the wrong set fails instead of agreeing with
+itself.
