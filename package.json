@@ -1,6 +1,6 @@
 {
 	"name": "@mikode13/cross-platform",
-	"version": "0.1.0",
+	"version": "0.0.0-development",
 	"description": "Cross-platform utilities for MiKode build and maintenance scripts",
 	"type": "module",
 	"license": "SEE LICENSE IN LICENSE",

@@ -77,3 +77,28 @@ those two commands compose, which a unit test of either one could not observe. T
 expected file count is derived from `src` inside the test, independently of the
 verifier, so a verifier that expects the wrong set fails instead of agreeing with
 itself.
+
+## Stable publication is enabled at 1.0.0
+
+**Decision.** Enable automated publication through the shared release workflow, and make
+the first automated release `1.0.0` rather than continuing the `0.x` line.
+
+**Context.** `0.1.0` was published manually, before the release pipeline existed. The
+automated npm publication standard requires an unpublished package's first automated
+release to be `1.0.0`, and requires a package with existing `0.x` versions to reconcile
+its newest npm version with a Git tag on the released commit before activating. That tag
+was missing and now points at `a1d5e8f`, the only commit containing the released source.
+
+`0.1.0` shipped the stale `dist/cliClean.*` output described above. A published npm
+version can never be overwritten, so that artifact stays as it is; the corrected contents
+reach consumers in the next release rather than through a republish.
+
+`clean` has been stable since it was written and its behavior is covered by tests, so a
+`1.0.0` public contract reflects what the package already provides rather than promising
+something new.
+
+**Consequences.** The source `package.json` stays at `0.0.0-development`; the real version
+exists only in npm, the Git tag, and the GitHub Release. Version bumps are never committed,
+and the repository has no `CHANGELOG.md`. Any later change that breaks the `clean` or CLI
+contract needs an explicit breaking-change marker, because the package now carries a
+stable major version.
