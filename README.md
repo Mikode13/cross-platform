@@ -67,13 +67,6 @@ automatically from `main`. The npm registry, Git tags, and GitHub Releases are t
 authoritative history; the `version` field in this repository stays at
 `0.0.0-development` and is never committed with a real version.
 
-## Releases
-
-Versions are derived from Conventional Commit titles by `semantic-release` and published
-automatically from `main`. The npm registry, Git tags, and GitHub Releases are the
-authoritative history; the `version` field in this repository stays at
-`0.0.0-development` and is never committed with a real version.
-
 ## License
 
 This project is source-available under the MIT License with the
