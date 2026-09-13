@@ -1,23 +1,21 @@
-import { readFile } from 'node:fs/promises';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { runPackageManager } from '../../src/packageManager.ts';
 
-const repositoryRoot = fileURLToPath(new URL('../../', import.meta.url));
+function packageManagerVersionFromUserAgent(userAgent: string | undefined): string {
+	const version = userAgent?.match(/^[^/\s]+\/(\S+)/u)?.[1];
+
+	if (!version) {
+		throw new Error('The package manager user agent does not contain a version');
+	}
+
+	return version;
+}
 
 describe('runPackageManager', () => {
 	it('runs the real package manager that invoked the test suite', async () => {
-		const manifest = JSON.parse(
-			await readFile(path.join(repositoryRoot, 'package.json'), 'utf8'),
-		) as { packageManager: string };
-		const expectedVersion = manifest.packageManager.slice(
-			manifest.packageManager.lastIndexOf('@') + 1,
-		);
+		const expectedVersion = packageManagerVersionFromUserAgent(process.env.npm_config_user_agent);
 
-		const { stdout, stderr } = await runPackageManager(['--version'], {
-			cwd: repositoryRoot,
-		});
+		const { stdout, stderr } = await runPackageManager(['--version']);
 
 		expect(stderr).toBe('');
 		expect(stdout.trim()).toBe(expectedVersion);
