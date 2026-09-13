@@ -39,7 +39,20 @@ const emitted = (await sourceFiles(path.join(repositoryRoot, 'src'))).flatMap(so
 // every published artifact by the MiKode licensing standard.
 const expected = new Set([...emitted, 'LICENSE', 'package.json', 'README.md']);
 
-const { stdout } = await execFileAsync('pnpm', ['pack', '--dry-run', '--json'], {
+// This verifier also covers a completely missing `dist`, so it cannot import the public
+// helper from the build output. Keep this bootstrap copy aligned with `runPackageManager`.
+const npmExecPath = process.env.npm_execpath;
+
+if (!npmExecPath) {
+	throw new Error('The script must be run through a package manager');
+}
+
+const packageManagerArgs = ['pack', '--dry-run', '--json'];
+const isJavaScript = new Set(['.js', '.cjs', '.mjs']).has(path.extname(npmExecPath).toLowerCase());
+const executable = isJavaScript ? process.execPath : npmExecPath;
+const executableArgs = isJavaScript ? [npmExecPath, ...packageManagerArgs] : packageManagerArgs;
+
+const { stdout } = await execFileAsync(executable, executableArgs, {
 	cwd: repositoryRoot,
 });
 

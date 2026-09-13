@@ -102,3 +102,26 @@ exists only in npm, the Git tag, and the GitHub Release. Version bumps are never
 and the repository has no `CHANGELOG.md`. Any later change that breaks the `clean` or CLI
 contract needs an explicit breaking-change marker, because the package now carries a
 stable major version.
+
+## Package manager execution uses its script entry point
+
+**Decision.** Export `runPackageManager`, which reads the package manager entry point from
+`npm_execpath` and invokes commands with `execFile`, without a shell. JavaScript entry
+points run through `process.execPath`; standalone entry points run directly.
+
+**Context.** `tsconfig`, `harness`, and `harness-cli` each invoke `pnpm` from a Node-based
+tarball verifier. On Windows, that name commonly resolves to a `.cmd` shim, which Node
+cannot execute with `execFile` without enabling a shell. Enabling a shell would make
+argument quoting part of the contract and repeat the same workaround in every consumer.
+The operation is already needed in three repositories, so it meets the shared-use
+threshold in the cross-platform script utilities standard.
+
+**Consequences.** Callers must run through a package manager script so `npm_execpath` is
+available. Output is buffered and returned as `stdout` and `stderr`; streaming remains
+outside the current contract. Failed commands retain the error and captured streams from
+`execFile`.
+
+The repository's tarball verifier repeats the small entry-point resolution because it
+must work while `dist` is deliberately absent or incomplete and therefore cannot import
+the built helper. Its packaging integration tests exercise this bootstrap copy, while the
+new helper has focused tests and an integration test against the real package manager.

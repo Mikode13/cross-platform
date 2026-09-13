@@ -33,4 +33,6 @@ testing, or CI.
 ## Current state
 
 `clean` is implemented and exported, both as a function and as the `mikode-scripts` CLI.
-See `README.md`'s Status section.
+`runPackageManager` is exported as a function for invoking the package manager that
+started a package script without relying on a platform shell. See `README.md`'s Status
+section.

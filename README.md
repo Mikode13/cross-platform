@@ -22,9 +22,12 @@ ADR is `Accepted`.
 
 ## Status
 
-The first (and currently only) capability, `clean`, is implemented: cross-platform-safe
-removal of a directory using Node's built-in `node:fs/promises`, exposed both as a
-function and as a CLI for `package.json` scripts.
+Two capabilities are implemented:
+
+- `clean`, for cross-platform-safe directory removal through a function or the
+  `mikode-scripts` CLI; and
+- `runPackageManager`, for invoking the package manager that started a package script
+  without passing its arguments through a shell.
 
 ## Install
 
@@ -32,7 +35,7 @@ function and as a CLI for `package.json` scripts.
 pnpm add @mikode13/cross-platform
 ```
 
-## Usage
+## Clean a directory
 
 As a function:
 
@@ -56,9 +59,29 @@ The CLI rejects an empty path, the root of the filesystem, and the current worki
 directory. It does not restrict the target to be inside the current working directory
 (for example `../other-dir` is allowed).
 
+## Run the current package manager
+
+Use `runPackageManager` when a Node script needs to invoke the same package manager that
+started it:
+
+```ts
+import { runPackageManager } from '@mikode13/cross-platform';
+
+const { stdout } = await runPackageManager(['pack', '--dry-run', '--json']);
+```
+
+The function reads `npm_execpath`, which package managers provide to package scripts. It
+runs JavaScript entry points through the current Node executable and standalone entry
+points directly. Arguments are passed separately without a shell. An optional `cwd`
+selects the child process's working directory and defaults to the current directory.
+
+The promise rejects with a clear error when `npm_execpath` is absent. A failed package
+manager command preserves its captured `stdout` and `stderr` on the error. Successful
+commands return both streams as strings; output is buffered rather than streamed.
+
 ## Tests
 
-`pnpm test` runs the unit and packaging integration suites.
+`pnpm test` runs the unit and local integration suites.
 
 ## Releases
 

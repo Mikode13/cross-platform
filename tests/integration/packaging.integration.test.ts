@@ -4,6 +4,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { runPackageManager } from '../../src/packageManager.ts';
 
 const execFileAsync = promisify(execFile);
 
@@ -17,7 +18,7 @@ function outputOf(error: unknown): { stdout: string; stderr: string } {
 }
 
 async function build(): Promise<void> {
-	await execFileAsync('pnpm', ['run', 'build'], { cwd: repositoryRoot });
+	await runPackageManager(['run', 'build'], { cwd: repositoryRoot });
 }
 
 /**
@@ -39,7 +40,7 @@ async function verify(): Promise<{ ok: boolean; stdout: string; stderr: string }
  * Derived independently of `scripts/pack-check.mjs`, so a verifier that silently expects
  * the wrong set fails here instead of agreeing with itself. Four emitted artifacts per
  * source (`.js`, `.js.map`, `.d.ts`, `.d.ts.map`) plus LICENSE, package.json, and
- * README.md, which npm always includes. That is 19 files today.
+ * README.md, which npm always includes.
  */
 async function expectedFileCount(): Promise<number> {
 	const entries = await readdir(path.join(repositoryRoot, 'src'), { recursive: true });
