@@ -1,4 +1,4 @@
-import { mkdtemp, realpath, writeFile } from 'node:fs/promises';
+import { mkdtemp, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -31,7 +31,9 @@ describe('runPackageManager', () => {
 			const entryPoint = path.join(workspace, `package-manager.${extension}`);
 			await writeFile(
 				entryPoint,
-				'process.stdout.write(JSON.stringify({ args: process.argv.slice(2), cwd: process.cwd() }));\n',
+				'process.stdout.write(JSON.stringify({ ' +
+					'args: process.argv.slice(2), ' +
+					'cwdName: process.cwd().split(/[\\\\/]/).at(-1) }));\n',
 			);
 			vi.stubEnv('npm_execpath', entryPoint);
 
@@ -40,9 +42,10 @@ describe('runPackageManager', () => {
 			});
 
 			expect(stderr).toBe('');
+			// Windows can report parent directories through 8.3 aliases for the same path.
 			expect(JSON.parse(stdout)).toEqual({
 				args: ['pack', '--dry-run'],
-				cwd: await realpath(workspace),
+				cwdName: path.basename(workspace),
 			});
 		},
 	);
